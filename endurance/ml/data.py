@@ -1,6 +1,34 @@
 import pandas_ta as ta
 import pandas as pd
 
+# Implement all functions that needed in lab.
+def convert_resample_timeframe(timeframe: str) -> str:
+    c = timeframe[:-1]
+    t = timeframe[-1]
+    if t == 'm':
+        t = "T"
+    else:
+        t = t.upper()
+    tmp = f"{c}{t}"
+    return tmp
+
+def resample_data(
+    base_data: pd.DataFrame,
+    resample_timeframe: str,
+) -> pd.DataFrame:
+    resample_tm = convert_resample_timeframe(resample_timeframe)
+    dfr = base_data.resample(resample_tm).agg(
+        {
+            'open': 'first',
+            'high': 'max',
+            'low': 'min',
+            'close': 'last',
+            'volume': 'sum'
+        }
+    ).reset_index()
+    dfr.set_index('timestamp', drop=True, inplace=True)
+    return dfr.iloc[:-1]
+
 def prepare_data(
     data: pd.DataFrame,
     indicators: list[dict],

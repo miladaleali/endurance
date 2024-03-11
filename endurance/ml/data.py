@@ -29,7 +29,7 @@ def resample_data(
     dfr.set_index('timestamp', drop=True, inplace=True)
     return dfr.iloc[:-1]
 
-def prepare_data(
+def add_indicators(
     data: pd.DataFrame,
     indicators: list[dict],
 ) -> pd.DataFrame:
@@ -39,3 +39,10 @@ def prepare_data(
     )
     data.ta.strategy(indis)
     return data
+
+def preprocess_data(
+    data: pd.DataFrame,
+    scaler: ...,
+) -> pd.DataFrame:
+    scaled_data = scaler.fit(data)
+    return scaled_data
